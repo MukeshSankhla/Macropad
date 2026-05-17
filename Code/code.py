@@ -3,6 +3,7 @@ import board, busio, digitalio, rotaryio, keypad, time
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
 from adafruit_hid.keycode import Keycode
+from adafruit_hid.mouse import Mouse
 from adafruit_hid.consumer_control import ConsumerControl
 from adafruit_hid.consumer_control_code import ConsumerControlCode
 import displayio, terminalio, i2cdisplaybus
@@ -18,6 +19,7 @@ displayio.release_displays()
 i2c   = busio.I2C(board.GP5, board.GP4)
 dbus  = i2cdisplaybus.I2CDisplayBus(i2c, device_address=0x3C)
 display = adafruit_displayio_ssd1306.SSD1306(dbus, width=128, height=64)
+mouse = Mouse(usb_hid.devices)
 
 W, H  = 128, 64
 WHITE = 0xFFFFFF
@@ -93,13 +95,14 @@ MODES = [
             ("EXP", "Explorer", lambda: tap(KC.CONTROL, KC.SHIFT, KC.E)),
         ],
     },
+
     # 2 ── Fusion 360
     {
         "name":      "Fusion360",
         "icon":      "F360",
         "enc_label": "ZOOM",
-        "enc_cw":  lambda: tap(KC.EQUALS),
-        "enc_ccw": lambda: tap(KC.MINUS),
+        "enc_cw":  lambda: mouse.move(wheel=3),   # scroll up  = zoom in
+        "enc_ccw": lambda: mouse.move(wheel=-3),  # scroll down = zoom out
         "keys": [
             ("SKT", "Sketch",  lambda: tap(KC.S)),
             ("EXT", "Extrude", lambda: tap(KC.E)),
