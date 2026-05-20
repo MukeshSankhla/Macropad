@@ -56,107 +56,40 @@ def cc_tap(code):
 # ─────────────────────────────────────────────────────
 # MODES  (name, icon 4ch, enc_label, enc_cw, enc_ccw, keys[9])
 # ─────────────────────────────────────────────────────
-MODES = [
-    # 0 ── Windows
-    {
-        "name":      "Windows",
-        "icon":      "WIN",
-        "enc_label": "VOLUME",
-        "enc_cw":  lambda: cc_tap(ConsumerControlCode.VOLUME_INCREMENT),
-        "enc_ccw": lambda: cc_tap(ConsumerControlCode.VOLUME_DECREMENT),
-        "keys": [
-            ("DSK", "Desktop",  lambda: tap(KC.GUI, KC.D)),
-            ("LCK", "Lock PC",  lambda: tap(KC.GUI, KC.L)),
-            ("SNP", "Snip",     lambda: tap(KC.GUI, KC.SHIFT, KC.S)),
-            ("AF4", "Close",    lambda: tap(KC.ALT, KC.F4)),
-            ("UND", "Undo",     lambda: tap(KC.CONTROL, KC.Z)),
-            ("RDO", "Redo",     lambda: tap(KC.CONTROL, KC.Y)),
-            ("TSK", "Task Mgr", lambda: tap(KC.CONTROL, KC.SHIFT, KC.ESCAPE)),
-            ("RUN", "Run",      lambda: tap(KC.GUI, KC.R)),
-            ("SET", "Settings", lambda: tap(KC.GUI, KC.I)),
-        ],
-    },
-    # 1 ── VS Code
-    {
-        "name":      "VS Code",
-        "icon":      "VSC",
-        "enc_label": "INDENT",
-        "enc_cw":  lambda: tap(KC.CONTROL, KC.RIGHT_BRACKET),
-        "enc_ccw": lambda: tap(KC.CONTROL, KC.LEFT_BRACKET),
-        "keys": [
-            ("TRM", "Terminal", lambda: tap(KC.CONTROL, KC.GRAVE)),
-            ("PAL", "Palette",  lambda: tap(KC.CONTROL, KC.SHIFT, KC.P)),
-            ("CMT", "Comment",  lambda: tap(KC.CONTROL, KC.SLASH)),
-            ("FMT", "Format",   lambda: tap(KC.ALT, KC.SHIFT, KC.F)),
-            ("UND", "Undo",     lambda: tap(KC.CONTROL, KC.Z)),
-            ("RDO", "Redo",     lambda: tap(KC.CONTROL, KC.Y)),
-            ("SPL", "Split",    lambda: tap(KC.CONTROL, KC.BACKSLASH)),
-            ("ZEN", "Zen",      lambda: tap(KC.CONTROL, KC.K, KC.Z)),
-            ("EXP", "Explorer", lambda: tap(KC.CONTROL, KC.SHIFT, KC.E)),
-        ],
-    },
-
-    # 2 ── Fusion 360
-    {
-        "name":      "Fusion360",
-        "icon":      "F360",
-        "enc_label": "ZOOM",
-        "enc_cw":  lambda: mouse.move(wheel=3),   # scroll up  = zoom in
-        "enc_ccw": lambda: mouse.move(wheel=-3),  # scroll down = zoom out
-        "keys": [
-            ("SKT", "Sketch",  lambda: tap(KC.S)),
-            ("EXT", "Extrude", lambda: tap(KC.E)),
-            ("FIL", "Fillet",  lambda: tap(KC.F)),
-            ("UND", "Undo",    lambda: tap(KC.CONTROL, KC.Z)),
-            ("RDO", "Redo",    lambda: tap(KC.CONTROL, KC.Y)),
-            ("MSR", "Measure", lambda: tap(KC.I)),
-            ("FIT", "Fit View",lambda: tap(KC.F6)),
-            ("SEC", "Section", lambda: tap(KC.ALT, KC.SHIFT, KC.S)),
-            ("RND", "Render",  lambda: tap(KC.CONTROL, KC.SHIFT, KC.R)),
-        ],
-    },
-    # 3 ── DaVinci Resolve
-    {
-        "name":      "DaVinci",
-        "icon":      "DAV",
-        "enc_label": "SCRUB",
-        "enc_cw":  lambda: tap(KC.RIGHT_ARROW),
-        "enc_ccw": lambda: tap(KC.LEFT_ARROW),
-        "keys": [
-            ("PLY", "Play",    lambda: tap(KC.SPACE)),
-            ("RZR", "Razor",   lambda: tap(KC.B)),
-            ("MKI", "Mark In", lambda: tap(KC.I)),
-            ("MKO", "Mark Out",lambda: tap(KC.O)),
-            ("UND", "Undo",    lambda: tap(KC.CONTROL, KC.Z)),
-            ("RDO", "Redo",    lambda: tap(KC.CONTROL, KC.SHIFT, KC.Z)),
-            ("FUL", "FullScr", lambda: tap(KC.P)),
-            ("EXP", "Export",  lambda: tap(KC.CONTROL, KC.E)),
-            ("CLR", "Color",   lambda: tap(KC.SHIFT, KC.SIX)),
-        ],
-    },
-    # 4 ── Media  (double-click encoder btn to toggle)
-    {
-        "name":      "Media",
-        "icon":      "MED",
-        "enc_label": "VOLUME",
-        "enc_cw":  lambda: cc_tap(ConsumerControlCode.VOLUME_INCREMENT),
-        "enc_ccw": lambda: cc_tap(ConsumerControlCode.VOLUME_DECREMENT),
-        "keys": [
-            ("PRV", "Prev",    lambda: cc_tap(ConsumerControlCode.SCAN_PREVIOUS_TRACK)),
-            ("PLY", "Play",    lambda: cc_tap(ConsumerControlCode.PLAY_PAUSE)),
-            ("NXT", "Next",    lambda: cc_tap(ConsumerControlCode.SCAN_NEXT_TRACK)),
-            ("MUT", "Mute",    lambda: cc_tap(ConsumerControlCode.MUTE)),
-            ("VD-", "Vol Dn",  lambda: cc_tap(ConsumerControlCode.VOLUME_DECREMENT)),
-            ("VD+", "Vol Up",  lambda: cc_tap(ConsumerControlCode.VOLUME_INCREMENT)),
-            ("BRD", "Brght-",  lambda: cc_tap(ConsumerControlCode.BRIGHTNESS_DECREMENT)),
-            ("BRU", "Brght+",  lambda: cc_tap(ConsumerControlCode.BRIGHTNESS_INCREMENT)),
-            ("STP", "Stop",    lambda: cc_tap(ConsumerControlCode.STOP)),
-        ],
-    },
-]
-
+try:
+    from modes import MODES
+except ImportError:
+    print("Failed to load modes.py")
+    MODES = [{
+        "name": "Error", "icon": "ERR", "enc_label": "ERR",
+        "enc_cw": {"action_type": "none", "action_value": ""},
+        "enc_ccw": {"action_type": "none", "action_value": ""},
+        "keys": [{"short_label": "ERR", "label": "Error", "action_type": "none", "action_value": []} for _ in range(9)]
+    }]
 NUM_MODES = len(MODES)
-MEDIA_IDX = 4   # index of Media mode
+MEDIA_IDX = NUM_MODES - 1
+
+def execute_action(action):
+    if not action or "action_type" not in action: return
+    atype = action["action_type"]
+    val = action["action_value"]
+    
+    if atype == "shortcut":
+        if not isinstance(val, list): return
+        codes = []
+        for k in val:
+            if hasattr(KC, k):
+                codes.append(getattr(KC, k))
+        if codes:
+            tap(*codes)
+    elif atype == "media":
+        if hasattr(ConsumerControlCode, val):
+            cc_tap(getattr(ConsumerControlCode, val))
+    elif atype == "mouse":
+        try:
+            mouse.move(wheel=int(val))
+        except:
+            pass
 
 # ─────────────────────────────────────────────────────
 # LOW-LEVEL BITMAP DRAW HELPERS
@@ -250,7 +183,8 @@ def cell_xy(idx):
     return x, y
 
 def draw_key_labels(g, mode_idx):
-    for i, (short, _, _) in enumerate(MODES[mode_idx]["keys"]):
+    for i, key_def in enumerate(MODES[mode_idx]["keys"]):
+        short = key_def.get("short_label", "BTN")
         cx, cy = cell_xy(i)
         # Key number (tiny, top-left of cell)
         num_lbl = label.Label(FONT, text=str(i+1), color=WHITE)
@@ -484,7 +418,7 @@ while True:
         btn_click_count = 0
 
         if clicks >= 2:
-            # ── DOUBLE CLICK → toggle Media mode ────
+            # ── DOUBLE CLICK → toggle Last Mode ────
             if current_mode == MEDIA_IDX:
                 current_mode = prev_mode
                 mode_select  = False
@@ -493,7 +427,7 @@ while True:
                 prev_mode    = current_mode
                 current_mode = MEDIA_IDX
                 mode_select  = False
-                draw_media_popup()
+                draw_main(current_mode)
 
         else:
             # ── SINGLE CLICK ────────────────────────
@@ -518,9 +452,9 @@ while True:
         else:
             m = MODES[current_mode]
             steps = abs(delta)
-            fn    = m["enc_cw"] if delta > 0 else m["enc_ccw"]
+            action = m["enc_cw"] if delta > 0 else m["enc_ccw"]
             for _ in range(steps):
-                fn()
+                execute_action(action)
 
     # ── Keypad ───────────────────────────────────────
     event = keys.events.get()
@@ -532,7 +466,7 @@ while True:
                 mode_select  = False
                 draw_main(current_mode)
         else:
-            _, _, action = MODES[current_mode]["keys"][k]
-            action()
+            action = MODES[current_mode]["keys"][k]
+            execute_action(action)
 
     time.sleep(0.004)
