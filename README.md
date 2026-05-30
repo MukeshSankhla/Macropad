@@ -1,6 +1,6 @@
 # MACROPAD
 
-![Macropad](images/IM1.JPG)
+![Macropad](Images/IM1.JPG)
 
 Most macropads today rely on custom PCBs and fixed firmware, which makes them difficult to modify, repair, or customize. For this project, I wanted to build something more accessible, modular, and maker-friendly while still looking and feeling like a premium device.
 
@@ -13,15 +13,15 @@ For the complete hardware build guide, CAD designs, and step-by-step assembly, c
 
 Here are some pictures of the Macropad and its interface:
 
-![Macropad 2](images/IM2.JPG)
+![Macropad 2](Images/IM2.JPG)
 <br>
-![UI 3](images/IM3.png)
+![UI 3](Images/IM3.png)
 <br>
-![UI 4](images/IM4.png)
+![UI 4](Images/IM4.png)
 <br>
-![Macropad 5](images/IM5.JPG)
+![Macropad 5](Images/IM5.JPG)
 <br>
-![Macropad 6](images/IM6.JPG)
+![Macropad 6](Images/IM6.JPG)
 
 ## How to Setup and Run the UI
 
